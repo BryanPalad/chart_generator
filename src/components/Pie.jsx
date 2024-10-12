@@ -1,11 +1,10 @@
 'use client';
 import { Pie } from "react-chartjs-2"
 import { Chart as ChartJs, Tooltip, Legend, ArcElement} from "chart.js";
-import {pieChartData} from "../utils/constants/MockData";
 
 ChartJs.register(Tooltip, Legend, ArcElement)
 
-export const PieGraph = () => {
+export const PieGraph = ({data}) => {
     const options = {
         plugins: {
             legend: {
@@ -21,7 +20,7 @@ export const PieGraph = () => {
     };
     return (
         <section className="w-full h-[500px] flex items-center justify-center">
-          <Pie options={options} data={pieChartData} />
+          <Pie options={options} data={data} />
         </section>
       );
 }

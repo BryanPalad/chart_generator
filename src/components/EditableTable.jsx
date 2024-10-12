@@ -20,7 +20,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { BasicSelect } from './SelectField';
-import { activityData } from '../utils/constants/MockData'
+import { activityData } from "../utils/constants/MockData"
 
 export const EditableTable = ({ data, setData }) => {
 
@@ -70,6 +70,10 @@ export const EditableTable = ({ data, setData }) => {
     }
 
     setEditedData(updatedData);
+  };
+
+  const handleActivityChange = (value) => {
+    setEditedData({ ...editedData, activity: value });
   };
 
   const handleAddRow = () => {
@@ -173,7 +177,12 @@ export const EditableTable = ({ data, setData }) => {
                 </TableCell>
                 <TableCell>
                   {editIdx === index ? (
-                    <BasicSelect options={activityData} label="Activity"/>
+                    <BasicSelect
+                      options={activityData}
+                      label="Activity"
+                      value={editedData.activity} // Pass the current value
+                      onChange={handleActivityChange} // Handle change
+                    />
                     // <TextField name="activity" value={editedData.activity} onChange={handleChange} />
                   ) : (
                     row.activity

@@ -135,70 +135,77 @@ export const pieChartData = {
 export const activityData = [
     {
         id: 1,
-        label: 'Monthly EWT', 
+        label: 'AP Bookkeeping',
+        value: 'AP Bookkeeping',
     },
     {
         id: 2,
-        label: 'Monthly WC',
+        label: 'GL Bookkeeping',
+        value: 'GL Bookkeeping',
     },
     {
         id: 3,
-        label: 'Tax', 
+        label: 'Tax Forms',
+        value: 'Tax Forms', 
     },
     {
         id: 4,
-        label: 'AP Bookkeeping', 
+        label: 'Expense Tracking',
+        value: 'Expense Tracking',
     },
     {
         id: 5,
-        label: 'GL Bookkeeping', 
+        label: 'Bank Reconciliation',
+        value: 'Bank Reconciliation',
     },
     {
         id: 6,
-        label: 'Expense Tracking', 
+        label: 'Monthly End Closing',
+        value: 'Monthly End Closing',
     },
     {
         id: 7,
-        label: 'Bank Reconciliation',
+        label: 'Monthly FS',
+        value: 'Monthly FS',
     },
     {
         id: 8,
-        label: 'Monthly Lapsing',
+        label: 'Monthly EWT',
+        value: 'Monthly EWT',
     },
     {
         id: 9,
-        label: 'Monthly Closing',
+        label: 'Monthly Wtax Compensation',
+        value: 'Monthly Wtax Compensation',
     },
     {
         id: 10,
-        label: 'Payroll Preparation',
+        label: 'Schedules',
+        value: 'Schedules',
     },
     {
         id: 11,
-        label: 'Quarterly VAT', 
+        label: 'Quarterly VAT',
+        value: 'Quarterly VAT',
     },
     {
         id: 12,
         label: 'Quarterly ITR',
+        value: 'Quarterly ITR',
     },
     {
         id: 13,
-        label: 'Monthly FS',
+        label: 'Updating Tracker',
+        value: 'Updating Tracker',
     },
     {
         id: 14,
-        label: 'BS Schedules',
+        label: 'Break',
+        value: 'Break',
     },
     {
         id: 15,
-        label: 'IS Schedules',
-    },
-    {
-        id: 16,
         label: 'Others',
-    },
-    {
-        id: 17,
-        label: 'Break',
+        value: 'Others',
     },
 ]
