@@ -141,7 +141,7 @@ export default function Home() {
   useEffect(() => {
     const newLabels = data.map(item => item.activity).filter(activity => activity); // Get non-empty activities
     const newData = data.map(item => item.totalTime ? Number(item.totalTime) : 0); // Convert totalTime to number for graph
-
+    
     setBarChartData(prevData => ({
       labels: newLabels, // Update the labels for the bar chart
       datasets: [{
@@ -161,26 +161,30 @@ export default function Home() {
 
   return (
     <section className="flex flex-col gap-2 w-full h-full py-2 px-12 overflow-hidden">
-      <div className="flex items-center justify-between text-center w-full bg-red">
+      <div className="flex flex-col lg:flex-row items-center justify-between text-center w-full bg-red">
         <Image src="/images/mega.jfif" alt="logo" width={100} height={100} />
-        <h4 className="text-center text-[18px]">OVERALL ACTIVITY TRACKER</h4>
-        <h4 className="font-mono font-normal text-[16px]">{currentTime}</h4>
+        <h4 className="text-center text-[16px] lg:text-[18px]">OVERALL ACTIVITY TRACKER</h4>
+        <h4 className="font-mono font-normal text-[14px] lg:text-[16px]">{currentTime}</h4>
       </div>
       
-      <div className="flex w-full justify-center items-center">
+      <div className="flex flex-col lg:flex-row w-full justify-center items-center">
         <CustomTextField label="Name" />
         <CustomTextField label="Position" />
       </div>
 
-      <div className="flex gap-4 mt-2">
+      <div className="flex flex-col lg:flex-row mt-2">
         <BarGraph data={barChartData} />
         <PieGraph data={pieChartData} />
       </div>
 
-      <EditableTable
-        data={data}
-        setData={setData}
-      />
+      <div className="flex flex-col gap-4">
+        <h4 className="text-center text-black text-[18px]">Activity Breakdown</h4>
+        <EditableTable
+            data={data}
+            setData={setData}
+        />
+      </div>
+      
     </section>
   );
 }

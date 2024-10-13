@@ -22,6 +22,6 @@
     },
     "typeRoots": ["./src/types", "./node_modules/@types"]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/components/SelectField.jsx", "src/components/EditableTable.jsx"],
   "exclude": ["node_modules"]
 }

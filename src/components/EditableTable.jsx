@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+  Box,
   Table,
   TableBody,
   TableCell,
@@ -21,6 +22,7 @@ import dayjs from 'dayjs';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { BasicSelect } from './SelectField';
 import { activityData } from "../utils/constants/MockData"
+import { BasicButtons } from './Button';
 
 export const EditableTable = ({ data, setData }) => {
 
@@ -77,10 +79,13 @@ export const EditableTable = ({ data, setData }) => {
   };
 
   const handleAddRow = () => {
+    const lastRow =  data[data.length -1];
+    const newStartTime = lastRow ? dayjs(lastRow.endTime) : dayjs().hour(0).minute(0).second(0);
+    
     const newRow = {
       id: data.length + 1,
-      startTime: dayjs().hour(0).minute(0).second(0),
-      endTime: dayjs().hour(0).minute(0).second(0),
+      startTime: newStartTime,
+      endTime: newStartTime,
       totalTime: '',
       activity: '',
       deliverable: '',
@@ -88,7 +93,12 @@ export const EditableTable = ({ data, setData }) => {
       description: '',
       remarks: '',
     };
-    setData([...data, newRow]);
+
+    const updatedData = [...data, newRow]
+    setData(updatedData);
+
+    setEditIdx(updatedData.length - 1);
+    setEditedData(newRow);
     setAnchorEl(null);
   };
 
@@ -109,6 +119,10 @@ export const EditableTable = ({ data, setData }) => {
   };
 
   return (
+    <React.Fragment>
+    <Box className="flex justify-center lg:justify-end">
+      <BasicButtons label="Add Activity" handleClick={handleAddRow} btnWidth='140px' btnHeight='40px'/>
+    </Box>
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <TableContainer component={Paper}>
         <Table>
@@ -237,7 +251,6 @@ export const EditableTable = ({ data, setData }) => {
                         open={Boolean(anchorEl) && selectedRowIndex === index}
                         onClose={handleMenuClose}
                       >
-                        <MenuItem onClick={handleAddRow}>Add</MenuItem>
                         <MenuItem onClick={() => handleEdit(index)}>Edit</MenuItem>
                         <MenuItem onClick={() => handleDeleteRow(index)}>Delete</MenuItem>
                       </Menu>
@@ -250,7 +263,8 @@ export const EditableTable = ({ data, setData }) => {
         </Table>
       </TableContainer>
     </LocalizationProvider>
-  );
+  </React.Fragment>
+    );
 };
 
 export default EditableTable;

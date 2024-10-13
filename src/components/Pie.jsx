@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 import { Pie } from "react-chartjs-2"
 import { Chart as ChartJs, Tooltip, Legend, ArcElement} from "chart.js";
 
@@ -18,9 +19,19 @@ export const PieGraph = ({data}) => {
             }
         }
     };
+
+    console.log(data.datasets[0].data[0]);
     return (
+      <React.Fragment>
         <section className="w-full h-[500px] flex items-center justify-center">
-          <Pie options={options} data={data} />
+          {data.datasets[0].data[0] <= 0 ? (
+            <div>
+              <h4>No Data Available</h4>{" "}
+            </div>
+          ) : (
+              <Pie options={options} data={data} />
+          )}
         </section>
-      );
+      </React.Fragment>
+    );
 }
