@@ -137,11 +137,46 @@ export default function Home() {
     return () => clearInterval(intervalId);
   }, []); // Empty dependency array ensures this runs once when the component mounts
 
-  // Update the barChartData and pieChartData whenever data changes
-  useEffect(() => {
-    const newLabels = data.map(item => item.activity).filter(activity => activity); // Get non-empty activities
-    const newData = data.map(item => item.totalTime ? Number(item.totalTime) : 0); // Convert totalTime to number for graph
+  // // Update the barChartData and pieChartData whenever data changes
+  // useEffect(() => {
+  //   const newLabels = data.map(item => item.activity).filter(activity => activity); // Get non-empty activities
+  //   const newData = data.map(item => item.totalTime ? Number(item.totalTime) : 0); // Convert totalTime to number for graph
     
+  //   setBarChartData(prevData => ({
+  //     labels: newLabels, // Update the labels for the bar chart
+  //     datasets: [{
+  //       ...prevData.datasets[0],
+  //       data: newData, // Update the data for the bar chart
+  //     }],
+  //   }));
+
+  //   setPieChartData(prevData => ({
+  //     labels: newLabels, // Update the labels for the pie chart
+  //     datasets: [{
+  //       ...prevData.datasets[0],
+  //       data: newData, // Update the data for the pie chart
+  //     }],
+  //   }));
+  // }, [data]);
+
+  useEffect(() => {
+    // Aggregate data by activity
+    const activityTimeMap: { [key: string]: number } = data.reduce((acc, item) => {
+      if (item.activity) {
+        const timeSpent = item.totalTime ? Number(item.totalTime) : 0;
+        if (acc[item.activity]) {
+          acc[item.activity] += timeSpent; // Add to existing activity time
+        } else {
+          acc[item.activity] = timeSpent; // Initialize new activity time
+        }
+      }
+      return acc;
+    }, {} as { [key: string]: number });
+  
+    // Extract labels (unique activities) and corresponding data (total time spent)
+    const newLabels = Object.keys(activityTimeMap);
+    const newData = Object.values(activityTimeMap);
+  
     setBarChartData(prevData => ({
       labels: newLabels, // Update the labels for the bar chart
       datasets: [{
@@ -149,7 +184,7 @@ export default function Home() {
         data: newData, // Update the data for the bar chart
       }],
     }));
-
+  
     setPieChartData(prevData => ({
       labels: newLabels, // Update the labels for the pie chart
       datasets: [{
@@ -158,7 +193,7 @@ export default function Home() {
       }],
     }));
   }, [data]);
-
+  
   return (
     <section className="flex flex-col gap-2 w-full h-full py-2 px-12 overflow-hidden">
       <div className="flex flex-col lg:flex-row items-center justify-between text-center w-full bg-red">

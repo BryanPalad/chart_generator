@@ -121,7 +121,7 @@ export const EditableTable = ({ data, setData }) => {
   return (
     <React.Fragment>
     <Box className="flex justify-center lg:justify-end">
-      <BasicButtons label="Add Activity" handleClick={handleAddRow} btnWidth='140px' btnHeight='40px'/>
+      <BasicButtons label="Add Activity" handleClick={handleAddRow} btnWidth='160px' btnHeight='40px'/>
     </Box>
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <TableContainer component={Paper}>
