@@ -23,8 +23,6 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { BasicSelect } from './SelectField';
 import { activityData } from "../utils/constants/MockData"
 import { BasicButtons } from './Button';
-import { IoIosAddCircle } from "react-icons/io";
-// import { TbReport } from "react-icons/tb";
 import { BasicDialogForm } from './BasicDialogForm';
 
 export const EditableTable = ({ data, setData }) => {
@@ -129,7 +127,6 @@ export const EditableTable = ({ data, setData }) => {
           handleClick={handleAddRow}
           btnWidth="160px"
           btnHeight="40px"
-          btnIcon={<IoIosAddCircle style={{ marginLeft: "10px" }} />}
         />
         <BasicDialogForm
           dialogTitle="Generate Report"
