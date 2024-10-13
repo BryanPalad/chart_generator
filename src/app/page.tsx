@@ -207,7 +207,7 @@ export default function Home() {
         </h4>
       </div>
 
-      <div className="flex flex-col lg:flex-row mt-2">
+      <div className="flex flex-col gap-2 lg:flex-row mt-2">
         <BarGraph data={barChartData} />
         <PieGraph data={pieChartData} />
       </div>
@@ -215,7 +215,7 @@ export default function Home() {
       <hr />
       
       <h4 className="text-center text-black text-[18px] mt-4 mb-2">Activity Breakdown</h4>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 mb-4">
         <div className="flex justify-center items-center">
           <CustomTextField label="Name" />
           <CustomTextField label="Position" />

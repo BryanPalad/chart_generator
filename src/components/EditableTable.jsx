@@ -22,7 +22,6 @@ import dayjs from 'dayjs';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { BasicSelect } from './SelectField';
 import { activityData } from "../utils/constants/MockData"
-import { BasicButtons } from './Button';
 import { BasicDialogForm } from './BasicDialogForm';
 
 export const EditableTable = ({ data, setData }) => {
@@ -119,15 +118,21 @@ export const EditableTable = ({ data, setData }) => {
     setSelectedRowIndex(-1);
   };
 
+  const handleKeyPress = (event, index) => {
+    if (event.key === "Enter") {
+      handleSave(index);
+      handleAddRow();
+    }
+  };
+
   return (
     <React.Fragment>
       <Box className="flex justify-center lg:justify-between">
-        <BasicButtons
-          label="Add Activity"
-          handleClick={handleAddRow}
-          btnWidth="160px"
-          btnHeight="40px"
-        />
+        <Box className="flex flex-col gap-2 items-center justify-center border border-slate-300 px-4 py-8 rounded-[5px] h-[60px]">
+          <h4 className="text-[16px] font-bold">{`${editedData.totalTime || 0}`}</h4>
+          <h4 className="text-[14px] font-bold">Total Hours</h4>
+        </Box>
+        
         <BasicDialogForm
           dialogTitle="Generate Report"
           dialogHeader="Generate your Report"
@@ -153,7 +158,7 @@ export const EditableTable = ({ data, setData }) => {
                 </TableCell>
                 <TableCell>
                   <TableSortLabel sx={{ fontWeight: "bold" }}>
-                    Total Time Spent (hrs)
+                    Time Spent (hrs)
                   </TableSortLabel>
                 </TableCell>
                 <TableCell>
@@ -287,6 +292,7 @@ export const EditableTable = ({ data, setData }) => {
                         name="remarks"
                         value={editedData.remarks}
                         onChange={handleChange}
+                        onKeyUp={(event) => handleKeyPress(event, index)}
                       />
                     ) : (
                       row.remarks
@@ -294,7 +300,13 @@ export const EditableTable = ({ data, setData }) => {
                   </TableCell>
                   <TableCell>
                     {editIdx === index ? (
-                      <>
+                      <Box className="flex flex-col">
+                        <Button
+                          onClick={handleAddRow}
+                          color="info"
+                        >
+                          Add
+                        </Button>
                         <Button
                           onClick={() => handleSave(index)}
                           color="primary"
@@ -304,7 +316,7 @@ export const EditableTable = ({ data, setData }) => {
                         <Button onClick={handleCancel} color="secondary">
                           Cancel
                         </Button>
-                      </>
+                      </Box>
                     ) : (
                       <>
                         <IconButton onClick={(e) => handleMenuOpen(e, index)}>

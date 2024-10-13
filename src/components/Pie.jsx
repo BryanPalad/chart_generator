@@ -2,7 +2,7 @@
 import React from 'react';
 import { Pie } from "react-chartjs-2"
 import { Chart as ChartJs, Tooltip, Legend, ArcElement} from "chart.js";
-
+import { Box } from '@mui/material';
 ChartJs.register(Tooltip, Legend, ArcElement)
 
 export const PieGraph = ({data}) => {
@@ -23,14 +23,21 @@ export const PieGraph = ({data}) => {
     console.log(data.datasets[0].data);
     return (
       <React.Fragment>
-        <section className="w-full h-[500px] flex items-center justify-center">
-          {data.datasets[0].data <= 0 ? (
+        <section className="w-full flex flex-col items-center">
+        <Box className="flex justify-center items-center border border-slate-300 py-2 w-full">
+          <h4 className="text-[18px] font-bold text-[#fc031c]">Activities Performed</h4>
+        </Box>
+        <Box className="flex justify-center items-center">
+          {data.datasets[0].data <= 0 ? ( 
             <div>
-              <h4>No Available Data</h4>{" "}
+              <h4 className='text-center mt-4'>No Available Data</h4>{" "}
             </div>
           ) : (
-              <Pie options={options} data={data} />
+            <Box className="mt-12">
+              <Pie options={options} data={data} style={{width: '450px'}}/>
+            </Box>
           )}
+          </Box>
         </section>
       </React.Fragment>
     );
