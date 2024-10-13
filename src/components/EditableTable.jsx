@@ -138,7 +138,6 @@ export const EditableTable = ({ data, setData }) => {
           agreeBtnTitle="Submit"
           disagreeBtnTitle="Cancel"
         />
-        {/* <BasicButtons btnColor="green" label="Generate Report" handleClick={handleAddRow} btnWidth='200px' btnHeight='40px' btnIcon={<TbReport style={{marginLeft: '10px'}}/>}/> */}
       </Box>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <TableContainer component={Paper}>
