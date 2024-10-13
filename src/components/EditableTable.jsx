@@ -23,6 +23,9 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { BasicSelect } from './SelectField';
 import { activityData } from "../utils/constants/MockData"
 import { BasicButtons } from './Button';
+import { IoIosAddCircle } from "react-icons/io";
+// import { TbReport } from "react-icons/tb";
+import { BasicDialogForm } from './BasicDialogForm';
 
 export const EditableTable = ({ data, setData }) => {
 
@@ -120,151 +123,220 @@ export const EditableTable = ({ data, setData }) => {
 
   return (
     <React.Fragment>
-    <Box className="flex justify-center lg:justify-end">
-      <BasicButtons label="Add Activity" handleClick={handleAddRow} btnWidth='160px' btnHeight='40px'/>
-    </Box>
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <TableSortLabel sx={{ fontWeight: 'bold' }}>Start Time</TableSortLabel>
-              </TableCell>
-              <TableCell>
-                <TableSortLabel sx={{ fontWeight: 'bold' }}>End Time</TableSortLabel>
-              </TableCell>
-              <TableCell>
-                <TableSortLabel sx={{ fontWeight: 'bold' }}>Total Time Spent (hrs)</TableSortLabel>
-              </TableCell>
-              <TableCell>
-                <TableSortLabel sx={{ fontWeight: 'bold' }}>Activity</TableSortLabel>
-              </TableCell>
-              <TableCell>
-                <TableSortLabel sx={{ fontWeight: 'bold' }}>Deliverable</TableSortLabel>
-              </TableCell>
-              <TableCell>
-                <TableSortLabel sx={{ fontWeight: 'bold' }}>No. of Docs Generated</TableSortLabel>
-              </TableCell>
-              <TableCell>
-                <TableSortLabel sx={{ fontWeight: 'bold' }}>Description</TableSortLabel>
-              </TableCell>
-              <TableCell>
-                <TableSortLabel sx={{ fontWeight: 'bold' }}>Remarks</TableSortLabel>
-              </TableCell>
-              <TableCell>Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.map((row, index) => (
-              <TableRow key={row.id}>
+      <Box className="flex justify-center lg:justify-between">
+        <BasicButtons
+          label="Add Activity"
+          handleClick={handleAddRow}
+          btnWidth="160px"
+          btnHeight="40px"
+          btnIcon={<IoIosAddCircle style={{ marginLeft: "10px" }} />}
+        />
+        <BasicDialogForm
+          dialogTitle="Generate Report"
+          dialogHeader="Generate your Report"
+          dialogContent="Are you sure you want to save this report?"
+          agreeBtnTitle="Submit"
+          disagreeBtnTitle="Cancel"
+        />
+        {/* <BasicButtons btnColor="green" label="Generate Report" handleClick={handleAddRow} btnWidth='200px' btnHeight='40px' btnIcon={<TbReport style={{marginLeft: '10px'}}/>}/> */}
+      </Box>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
                 <TableCell>
-                  {editIdx === index ? (
-                    <TimePicker
-                      views={['hours', 'minutes']}
-                      value={editedData.startTime ? dayjs(editedData.startTime) : null}
-                      onChange={(newValue) => handleTimeChange('startTime', newValue)}
-                      renderInput={(params) => <TextField {...params} />}
-                    />
-                  ) : (
-                    row.startTime ? dayjs(row.startTime).format('HH:mm') : ''
-                  )}
+                  <TableSortLabel sx={{ fontWeight: "bold" }}>
+                    Start Time
+                  </TableSortLabel>
                 </TableCell>
                 <TableCell>
-                  {editIdx === index ? (
-                    <TimePicker
-                      views={['hours', 'minutes']}
-                      value={editedData.endTime ? dayjs(editedData.endTime) : null}
-                      onChange={(newValue) => handleTimeChange('endTime', newValue)}
-                      renderInput={(params) => <TextField {...params} />}
-                    />
-                  ) : (
-                    row.endTime ? dayjs(row.endTime).format('HH:mm') : ''
-                  )}
+                  <TableSortLabel sx={{ fontWeight: "bold" }}>
+                    End Time
+                  </TableSortLabel>
                 </TableCell>
                 <TableCell>
-                  <TextField
-                    name="totalTime"
-                    value={editIdx === index ? editedData.totalTime : row.totalTime}
-                    disabled
-                  />
+                  <TableSortLabel sx={{ fontWeight: "bold" }}>
+                    Total Time Spent (hrs)
+                  </TableSortLabel>
                 </TableCell>
                 <TableCell>
-                  {editIdx === index ? (
-                    <BasicSelect
-                      options={activityData}
-                      label="Activity"
-                      value={editedData.activity} // Pass the current value
-                      onChange={handleActivityChange} // Handle change
-                    />
-                    // <TextField name="activity" value={editedData.activity} onChange={handleChange} />
-                  ) : (
-                    row.activity
-                  )}
+                  <TableSortLabel sx={{ fontWeight: "bold" }}>
+                    Activity
+                  </TableSortLabel>
                 </TableCell>
                 <TableCell>
-                  {editIdx === index ? (
-                    <TextField name="deliverable" value={editedData.deliverable} onChange={handleChange} />
-                  ) : (
-                    row.deliverable
-                  )}
+                  <TableSortLabel sx={{ fontWeight: "bold" }}>
+                    Deliverable
+                  </TableSortLabel>
                 </TableCell>
                 <TableCell>
-                  {editIdx === index ? (
-                    <TextField
-                      type="number"
-                      name="docsGenerated"
-                      value={editedData.docsGenerated}
-                      onChange={handleChange}
-                    />
-                  ) : (
-                    row.docsGenerated
-                  )}
+                  <TableSortLabel sx={{ fontWeight: "bold" }}>
+                    No. of Docs Generated
+                  </TableSortLabel>
                 </TableCell>
                 <TableCell>
-                  {editIdx === index ? (
-                    <TextField name="description" value={editedData.description} onChange={handleChange} />
-                  ) : (
-                    row.description
-                  )}
+                  <TableSortLabel sx={{ fontWeight: "bold" }}>
+                    Description
+                  </TableSortLabel>
                 </TableCell>
                 <TableCell>
-                  {editIdx === index ? (
-                    <TextField name="remarks" value={editedData.remarks} onChange={handleChange} />
-                  ) : (
-                    row.remarks
-                  )}
+                  <TableSortLabel sx={{ fontWeight: "bold" }}>
+                    Remarks
+                  </TableSortLabel>
                 </TableCell>
-                <TableCell>
-                  {editIdx === index ? (
-                    <>
-                      <Button onClick={() => handleSave(index)} color="primary">Save</Button>
-                      <Button onClick={handleCancel} color="secondary">Cancel</Button>
-                    </>
-                  ) : (
-                    <>
-                      <IconButton onClick={(e) => handleMenuOpen(e, index)}>
-                        <MoreVertIcon />
-                      </IconButton>
-                      <Menu
-                        anchorEl={anchorEl}
-                        open={Boolean(anchorEl) && selectedRowIndex === index}
-                        onClose={handleMenuClose}
-                      >
-                        <MenuItem onClick={() => handleEdit(index)}>Edit</MenuItem>
-                        <MenuItem onClick={() => handleDeleteRow(index)}>Delete</MenuItem>
-                      </Menu>
-                    </>
-                  )}
-                </TableCell>
+                <TableCell>Actions</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </LocalizationProvider>
-  </React.Fragment>
-    );
+            </TableHead>
+            <TableBody>
+              {data.map((row, index) => (
+                <TableRow key={row.id}>
+                  <TableCell>
+                    {editIdx === index ? (
+                      <TimePicker
+                        views={["hours", "minutes"]}
+                        value={
+                          editedData.startTime
+                            ? dayjs(editedData.startTime)
+                            : null
+                        }
+                        onChange={(newValue) =>
+                          handleTimeChange("startTime", newValue)
+                        }
+                        renderInput={(params) => <TextField {...params} />}
+                      />
+                    ) : row.startTime ? (
+                      dayjs(row.startTime).format("HH:mm")
+                    ) : (
+                      ""
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {editIdx === index ? (
+                      <TimePicker
+                        views={["hours", "minutes"]}
+                        value={
+                          editedData.endTime ? dayjs(editedData.endTime) : null
+                        }
+                        onChange={(newValue) =>
+                          handleTimeChange("endTime", newValue)
+                        }
+                        renderInput={(params) => <TextField {...params} />}
+                      />
+                    ) : row.endTime ? (
+                      dayjs(row.endTime).format("HH:mm")
+                    ) : (
+                      ""
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <TextField
+                      name="totalTime"
+                      value={
+                        editIdx === index ? editedData.totalTime : row.totalTime
+                      }
+                      disabled
+                    />
+                  </TableCell>
+                  <TableCell>
+                    {editIdx === index ? (
+                      <BasicSelect
+                        options={activityData}
+                        label="Activity"
+                        value={editedData.activity} // Pass the current value
+                        onChange={handleActivityChange} // Handle change
+                      />
+                    ) : (
+                      // <TextField name="activity" value={editedData.activity} onChange={handleChange} />
+                      row.activity
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {editIdx === index ? (
+                      <TextField
+                        name="deliverable"
+                        value={editedData.deliverable}
+                        onChange={handleChange}
+                      />
+                    ) : (
+                      row.deliverable
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {editIdx === index ? (
+                      <TextField
+                        type="number"
+                        name="docsGenerated"
+                        value={editedData.docsGenerated}
+                        onChange={handleChange}
+                      />
+                    ) : (
+                      row.docsGenerated
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {editIdx === index ? (
+                      <TextField
+                        name="description"
+                        value={editedData.description}
+                        onChange={handleChange}
+                      />
+                    ) : (
+                      row.description
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {editIdx === index ? (
+                      <TextField
+                        name="remarks"
+                        value={editedData.remarks}
+                        onChange={handleChange}
+                      />
+                    ) : (
+                      row.remarks
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {editIdx === index ? (
+                      <>
+                        <Button
+                          onClick={() => handleSave(index)}
+                          color="primary"
+                        >
+                          Save
+                        </Button>
+                        <Button onClick={handleCancel} color="secondary">
+                          Cancel
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <IconButton onClick={(e) => handleMenuOpen(e, index)}>
+                          <MoreVertIcon />
+                        </IconButton>
+                        <Menu
+                          anchorEl={anchorEl}
+                          open={Boolean(anchorEl) && selectedRowIndex === index}
+                          onClose={handleMenuClose}
+                        >
+                          <MenuItem onClick={() => handleEdit(index)}>
+                            Edit
+                          </MenuItem>
+                          <MenuItem onClick={() => handleDeleteRow(index)}>
+                            Delete
+                          </MenuItem>
+                        </Menu>
+                      </>
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </LocalizationProvider>
+    </React.Fragment>
+  );
 };
 
 export default EditableTable;

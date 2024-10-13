@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { CustomTextField } from "../components/CustomTextField";
 import { EditableTable } from "../components/EditableTable";
 import dayjs from 'dayjs';
+import { BasicDatePicker } from "../components/BasicDatePicker";
 
 interface BarChartData {
   labels: string[];
@@ -193,18 +194,17 @@ export default function Home() {
       }],
     }));
   }, [data]);
-  
+
   return (
     <section className="flex flex-col gap-2 w-full h-full py-2 px-12 overflow-hidden">
       <div className="flex flex-col lg:flex-row items-center justify-between text-center w-full bg-red">
         <Image src="/images/mega.jfif" alt="logo" width={100} height={100} />
-        <h4 className="text-center text-[16px] lg:text-[18px]">OVERALL ACTIVITY TRACKER</h4>
-        <h4 className="font-mono font-normal text-[14px] lg:text-[16px]">{currentTime}</h4>
-      </div>
-      
-      <div className="flex flex-col lg:flex-row w-full justify-center items-center">
-        <CustomTextField label="Name" />
-        <CustomTextField label="Position" />
+        <h4 className="text-center text-[16px] lg:text-[18px]">
+          OVERALL ACTIVITY TRACKER
+        </h4>
+        <h4 className="font-mono font-normal text-[14px] lg:text-[16px]">
+          {currentTime}
+        </h4>
       </div>
 
       <div className="flex flex-col lg:flex-row mt-2">
@@ -212,14 +212,20 @@ export default function Home() {
         <PieGraph data={pieChartData} />
       </div>
 
-      <div className="flex flex-col gap-4">
-        <h4 className="text-center text-black text-[18px]">Activity Breakdown</h4>
-        <EditableTable
-            data={data}
-            setData={setData}
-        />
-      </div>
+      <hr />
       
+      <h4 className="text-center text-black text-[18px] mt-4 mb-2">Activity Breakdown</h4>
+      <div className="flex flex-col gap-4">
+        <div className="flex justify-center items-center">
+          <CustomTextField label="Name" />
+          <CustomTextField label="Position" />
+          <div className="mt-[-10px]">
+            <BasicDatePicker label="Activity Date"/>
+          </div>
+          
+        </div>
+        <EditableTable data={data} setData={setData} />
+      </div>
     </section>
   );
 }

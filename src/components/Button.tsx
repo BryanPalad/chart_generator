@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import { IoIosAddCircle } from "react-icons/io";
+import { TbReport } from "react-icons/tb";
 
 interface ButtonProps {
   variant?: 'contained' | 'text' | 'outlined';
@@ -8,10 +9,12 @@ interface ButtonProps {
   handleClick: () => void;
   btnWidth?: string;
   btnHeight?: string;
+  btnColor?: string;
+  btnIcon?: React.ReactNode;
 }
 
-export const BasicButtons: React.FC<ButtonProps> = ({variant = "contained", label, handleClick, btnWidth, btnHeight}) => {
+export const BasicButtons: React.FC<ButtonProps> = ({variant = "contained", label, handleClick, btnWidth, btnHeight, btnColor, btnIcon}) => {
   return (
-      <Button variant={variant} onClick={handleClick} sx={{ width: btnWidth, height: btnHeight}}>{label}<IoIosAddCircle style={{marginLeft: '10px'}}/></Button>
+      <Button variant={variant} onClick={handleClick} sx={{ width: btnWidth, height: btnHeight, backgroundColor: btnColor}}>{label}{btnIcon}</Button>
   );
 }

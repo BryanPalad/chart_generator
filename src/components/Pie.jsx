@@ -20,13 +20,13 @@ export const PieGraph = ({data}) => {
         }
     };
 
-    console.log(data.datasets[0].data[0]);
+    console.log(data.datasets[0].data);
     return (
       <React.Fragment>
         <section className="w-full h-[500px] flex items-center justify-center">
-          {data.datasets[0].data[0] <= 0 ? (
+          {data.datasets[0].data <= 0 ? (
             <div>
-              <h4>No Data Available</h4>{" "}
+              <h4>No Available Data</h4>{" "}
             </div>
           ) : (
               <Pie options={options} data={data} />
