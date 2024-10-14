@@ -8,6 +8,10 @@ import { EditableTable } from "../components/EditableTable";
 import dayjs from 'dayjs';
 import { BasicDatePicker } from "../components/BasicDatePicker";
 
+
+import { filterByData, monthlyBarChartData } from "../utils/constants/MockData"
+import BasicSelect from "@/components/SelectField";
+
 interface BarChartData {
   labels: string[];
   datasets: {
@@ -113,7 +117,33 @@ export default function Home() {
     }],
   });
 
+  const dailyLabels = [
+    'October 14', 'October 15', 'October 16'
+  ];
+  
+  const dailyBarChartData = {
+    labels: dailyLabels,
+    datasets: [
+      {
+        label: 'Expense Tracking',
+        data: [120, 150, 180],
+        backgroundColor: 'rgba(75, 192, 192, 0.6)', // Color for the Sales bars
+      },
+      {
+        label: 'Bank Reconciliation',
+        data: [100, 130, 160],
+        backgroundColor: 'rgba(255, 99, 132, 0.6)', // Color for the Expenses bars
+      },
+      {
+        label: 'Updating Tracker',
+        data: [20, 20, 20],
+        backgroundColor: 'rgba(255, 206, 86, 0.6)', // Color for the Profits bars
+      },
+    ],
+  };
+
   const [currentTime, setCurrentTime] = useState('');
+  const [filter, setFilter] = useState('Today');
 
   useEffect(() => {
     const updateTime = () => {
@@ -195,6 +225,14 @@ export default function Home() {
     }));
   }, [data]);
 
+  const handleFilterChange = (value: string) => {
+    setFilter(value);
+  };
+
+  const handleSaveData = () => {
+
+  };
+
   return (
     <section className="flex flex-col gap-2 w-full h-full py-2 px-12 overflow-hidden">
       <div className="flex flex-col lg:flex-row items-center justify-between text-center w-full bg-red">
@@ -206,25 +244,45 @@ export default function Home() {
           {currentTime}
         </h4>
       </div>
+      <div className="w-[40px]">
+        <BasicSelect
+          options={filterByData}
+          label="Filter by:"
+          value={filter}
+          onChange={(value: string) => handleFilterChange(value)}
+        />
+      </div>
 
       <div className="flex flex-col gap-2 lg:flex-row mt-2">
-        <BarGraph data={barChartData} />
+        <BarGraph
+          data={
+            filter === "Today"
+              ? barChartData
+              : filter === "Daily"
+              ? dailyBarChartData
+              : filter === "Monthly"
+              ? monthlyBarChartData
+              : barChartData
+          }
+          filter={filter}
+        />
         <PieGraph data={pieChartData} />
       </div>
 
       <hr />
-      
-      <h4 className="text-center text-black text-[18px] mt-4 mb-2">Activity Breakdown</h4>
+
+      <h4 className="text-center text-black text-[18px] mt-4 mb-2">
+        Activity Breakdown
+      </h4>
       <div className="flex flex-col gap-4 mb-4">
-        <div className="flex justify-center items-center">
+        <div className="flex flex-col lg:flex-row justify-center items-center">
           <CustomTextField label="Name" />
           <CustomTextField label="Position" />
           <div className="mt-[-10px]">
-            <BasicDatePicker label="Activity Date"/>
+            <BasicDatePicker label="Activity Date" />
           </div>
-          
         </div>
-        <EditableTable data={data} setData={setData} />
+        <EditableTable data={data} setData={setData} saveData={handleSaveData}/>
       </div>
     </section>
   );

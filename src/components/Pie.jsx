@@ -33,7 +33,7 @@ export const PieGraph = ({data}) => {
               <h4 className='text-center mt-4'>No Available Data</h4>{" "}
             </div>
           ) : (
-            <Box className="mt-12">
+            <Box className="mt-8">
               <Pie options={options} data={data} style={{width: '450px'}}/>
             </Box>
           )}

@@ -20,7 +20,7 @@ ChartJs.register(
   Legend
 );
 
-export const BarGraph = ({data}) => {
+export const BarGraph = ({data, filter}) => {
     const options = {
       responsive: true,
       scales: {
@@ -43,12 +43,34 @@ export const BarGraph = ({data}) => {
         },
       },
     };
+
+    const stackedOptions = {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: "top", // Position of the legend
+        },
+        title: {
+          display: true,
+          text: "Monthly Activity Data", // Title of the chart
+        },
+      },
+      scales: {
+        y: {
+          stacked: true, // Enable stacking on the y-axis
+        },
+        x: {
+          stacked: true, // Enable stacking on the x-axis
+        },
+      },
+    };
+
   return (
     <section className="flex flex-col w-full">
       <Box className="flex justify-center items-center border border-slate-300 py-2">
         <h4 className="text-[18px] font-bold text-[#fc031c]">Time Spent Per Activity</h4>
       </Box>
-      <Bar options={options} data={data} />
+      <Bar options={filter === 'Today' ? options : stackedOptions } data={data} />
     </section>
   );
 };

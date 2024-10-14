@@ -208,4 +208,73 @@ export const activityData = [
         label: 'Others',
         value: 'Others',
     },
-]
+  ];
+
+  export const filterByData = [
+    {
+        id: 1,
+        label: 'Today',
+        value: 'Today',
+    },
+    {
+        id: 2,
+        label: 'Daily',
+        value: 'Daily',
+    },
+    {
+        id: 3,
+        label: 'Monthly',
+        value: 'Monthly',
+    }
+  ];
+
+
+  export const monthlyLabels = [
+    'October', 'November', 'December'
+  ];
+  
+  export const monthlyBarChartData = {
+    labels: monthlyLabels,
+    datasets: [
+      {
+        label: 'Expense Tracking',
+        data: [120, 150, 180],
+        backgroundColor: 'rgba(75, 192, 192, 0.6)', // Color for the Sales bars
+      },
+      {
+        label: 'Bank Reconciliation',
+        data: [100, 130, 160],
+        backgroundColor: 'rgba(255, 99, 132, 0.6)', // Color for the Expenses bars
+      },
+      {
+        label: 'Updating Tracker',
+        data: [20, 20, 20],
+        backgroundColor: 'rgba(255, 206, 86, 0.6)', // Color for the Profits bars
+      },
+    ],
+  };
+
+  export const dailyLabels = [
+    'October 14', 'October 15', 'October 16'
+  ];
+  
+  export const dailyBarChartData = {
+    labels: dailyLabels,
+    datasets: [
+      {
+        label: 'Expense Tracking',
+        data: [120, 150, 180],
+        backgroundColor: 'rgba(75, 192, 192, 0.6)', // Color for the Sales bars
+      },
+      {
+        label: 'Bank Reconciliation',
+        data: [100, 130, 160],
+        backgroundColor: 'rgba(255, 99, 132, 0.6)', // Color for the Expenses bars
+      },
+      {
+        label: 'Updating Tracker',
+        data: [20, 20, 20],
+        backgroundColor: 'rgba(255, 206, 86, 0.6)', // Color for the Profits bars
+      },
+    ],
+  };

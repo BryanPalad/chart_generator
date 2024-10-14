@@ -12,9 +12,10 @@ interface Props {
     dialogContent: string;
     disagreeBtnTitle: string;
     agreeBtnTitle: string;
+    handleAgree: () => void;
 }
 
-export const BasicDialogForm: React.FC<Props> = ({dialogTitle, dialogHeader, dialogContent, disagreeBtnTitle, agreeBtnTitle}) => {
+export const BasicDialogForm: React.FC<Props> = ({dialogTitle, dialogHeader, dialogContent, disagreeBtnTitle, agreeBtnTitle, handleAgree}) => {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -46,7 +47,7 @@ export const BasicDialogForm: React.FC<Props> = ({dialogTitle, dialogHeader, dia
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>{disagreeBtnTitle}</Button>
-          <Button onClick={handleClose} autoFocus>
+          <Button onClick={handleAgree} autoFocus>
             {agreeBtnTitle}
           </Button>
         </DialogActions>

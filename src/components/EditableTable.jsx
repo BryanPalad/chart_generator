@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Table,
@@ -23,13 +23,68 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { BasicSelect } from './SelectField';
 import { activityData } from "../utils/constants/MockData"
 import { BasicDialogForm } from './BasicDialogForm';
+import { BasicButtons } from './Button';
 
-export const EditableTable = ({ data, setData }) => {
+export const EditableTable = ({ data, setData, saveData }) => {
 
   const [editIdx, setEditIdx] = useState(-1);
   const [editedData, setEditedData] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedRowIndex, setSelectedRowIndex] = useState(-1);
+  const [totalTime, setTotalTime] = useState(0);
+
+  useEffect(() => {
+    // If data is empty, initialize with a new row and set it to edit mode
+    if (data.length === 0) {
+      const newRow = {
+        id: 1,
+        startTime: dayjs().hour(0).minute(0).second(0),
+        endTime: dayjs().hour(0).minute(0).second(0),
+        totalTime: '',
+        activity: '',
+        deliverable: '',
+        docsGenerated: '',
+        description: '',
+        remarks: '',
+      };
+      setData([newRow]);
+      setEditIdx(0);  // Set first row to edit mode
+      setEditedData(newRow);  // Set editedData to the new row
+    }
+  }, [data, setData]);
+
+  useEffect(() => {
+    // Step 2: Calculate total time whenever data changes
+    const calculateTotal = () => {
+      return data.reduce((acc, row) => {
+        if (row.startTime && row.endTime) {
+          const start = dayjs(row.startTime);
+          const end = dayjs(row.endTime);
+          const diffInMinutes = end.diff(start, 'minute');
+          return acc + diffInMinutes; // Sum up total minutes
+        }
+        return acc;
+      }, 0);
+    };
+    const totalMinutes = calculateTotal();
+    setTotalTime(totalMinutes); // Convert minutes to hours if necessary
+  }, [data]);
+  
+  const formatTotalTime = (totalMinutes) => {
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    return `${hours}:${minutes < 10 ? '0' + minutes : minutes}`; // Format as "hh:mm"
+  };
+
+  // const calculateTotalTime = (startTime, endTime) => {
+  //   if (startTime && endTime) {
+  //     const diffInMinutes = dayjs(endTime).diff(dayjs(startTime), 'minute');
+  //     const hours = Math.floor(diffInMinutes / 60);
+  //     const minutes = diffInMinutes % 60;
+  //     return `${hours}:${minutes < 10 ? '0' + minutes : minutes}`; // Format as "hh:mm"
+  //   }
+  //   return '';
+  // };  
 
   const calculateTotalTime = (startTime, endTime) => {
     if (startTime && endTime) {
@@ -48,6 +103,17 @@ export const EditableTable = ({ data, setData }) => {
   const handleSave = (index) => {
     const updatedData = [...data];
     updatedData[index] = editedData;
+
+    // // Recalculate total time for the row
+    // const startTime = dayjs(editedData.startTime);
+    // const endTime = dayjs(editedData.endTime);
+    // if (startTime.isValid() && endTime.isValid()) {
+    //   const diffInMinutes = endTime.diff(startTime, 'minute');
+    //   updatedData[index].totalTime = diffInMinutes; // Store total time in minutes
+    // } else {
+    //   updatedData[index].totalTime = 0; // If times are invalid, set totalTime to 0
+    // }
+
     setData(updatedData);
     setEditIdx(-1);
     setAnchorEl(null);
@@ -66,11 +132,11 @@ export const EditableTable = ({ data, setData }) => {
 
   const handleTimeChange = (name, value) => {
     const updatedData = { ...editedData, [name]: value };
-
-    if (name === 'startTime' || name === 'endTime') {
+    // Calculate total time only if both startTime and endTime are set
+    if (updatedData.startTime && updatedData.endTime) {
       updatedData.totalTime = calculateTotalTime(updatedData.startTime, updatedData.endTime);
     }
-
+  
     setEditedData(updatedData);
   };
 
@@ -118,28 +184,33 @@ export const EditableTable = ({ data, setData }) => {
     setSelectedRowIndex(-1);
   };
 
-  const handleKeyPress = (event, index) => {
+  const handleKeyPress = async (event, index) => {
     if (event.key === "Enter") {
-      handleSave(index);
-      handleAddRow();
+      handleSave(index)
     }
   };
 
   return (
     <React.Fragment>
-      <Box className="flex justify-center lg:justify-between">
-        <Box className="flex flex-col gap-2 items-center justify-center border border-slate-300 px-4 py-8 rounded-[5px] h-[60px]">
-          <h4 className="text-[16px] font-bold">{`${editedData.totalTime || 0}`}</h4>
+      <Box className="flex justify-center gap-2 lg:justify-between">
+        <Box className="flex flex-col items-center justify-center border border-slate-300 px-4 py-8 rounded-[5px] h-[60px]">
+          <h4 className="text-[16px] font-bold">
+            {formatTotalTime(totalTime)}
+          </h4>
           <h4 className="text-[14px] font-bold">Total Hours</h4>
         </Box>
-        
-        <BasicDialogForm
-          dialogTitle="Generate Report"
-          dialogHeader="Generate your Report"
-          dialogContent="Are you sure you want to save this report?"
-          agreeBtnTitle="Submit"
-          disagreeBtnTitle="Cancel"
-        />
+
+        <Box className="flex gap-2">
+          <BasicButtons variant='contained' label="Add Activity" handleClick={handleAddRow}/>
+          <BasicDialogForm
+            dialogTitle="Generate Report"
+            dialogHeader="Generate your Report"
+            dialogContent="Are you sure you want to save this report?"
+            agreeBtnTitle="Submit"
+            disagreeBtnTitle="Cancel"
+            handleAgree={saveData}
+          />
+        </Box>
       </Box>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <TableContainer component={Paper}>
@@ -204,7 +275,7 @@ export const EditableTable = ({ data, setData }) => {
                         onChange={(newValue) =>
                           handleTimeChange("startTime", newValue)
                         }
-                        renderInput={(params) => <TextField {...params} />}
+                        renderInput={(params) => <TextField {...params}/>}
                       />
                     ) : row.startTime ? (
                       dayjs(row.startTime).format("HH:mm")
@@ -292,7 +363,7 @@ export const EditableTable = ({ data, setData }) => {
                         name="remarks"
                         value={editedData.remarks}
                         onChange={handleChange}
-                        onKeyUp={(event) => handleKeyPress(event, index)}
+                        onKeyDown={(event) => handleKeyPress(event, index)}
                       />
                     ) : (
                       row.remarks
@@ -301,12 +372,6 @@ export const EditableTable = ({ data, setData }) => {
                   <TableCell>
                     {editIdx === index ? (
                       <Box className="flex flex-col">
-                        <Button
-                          onClick={handleAddRow}
-                          color="info"
-                        >
-                          Add
-                        </Button>
                         <Button
                           onClick={() => handleSave(index)}
                           color="primary"
