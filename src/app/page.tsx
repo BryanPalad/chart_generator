@@ -7,33 +7,32 @@ import { CustomTextField } from "../components/CustomTextField";
 import { EditableTable } from "../components/EditableTable";
 import dayjs from 'dayjs';
 import { BasicDatePicker } from "../components/BasicDatePicker";
-
-
-import { filterByData, monthlyBarChartData } from "../utils/constants/MockData"
+import { filterByData, monthlyBarChartData, activityData } from "../context/utils/constants/MockData"
 import BasicSelect from "@/components/SelectField";
+import { useExecuteToast } from "../context/hooks/useExecuteToast";
+import { BarChartData, PieChartData } from "../types/types";
 
-interface BarChartData {
-  labels: string[];
-  datasets: {
-    label: string;
-    data: (string | number)[];
-    backgroundColor: string[];
-    borderColor: string[];
-    borderWidth: number;
-  }[];
+
+interface Dataset {
+  label: string;
+  data: number[];
+  backgroundColor: string;
 }
 
-interface PieChartData {
-  labels: string[];
-  datasets: {
-    label: string;
-    data: (string | number)[];
-    backgroundColor: string[];
-    hoverOffset: number;
-  }[];
+interface DailyBarChartData {
+  labels: string | undefined; // Each entry has a labels property that is a string (e.g., "October 07")
+  datasets: Dataset[]; // Each entry has a datasets property that is an array of Dataset
 }
 
 export default function Home() {
+
+  useEffect(() => {
+    const existingDailyBarChartData = localStorage.getItem('dailyBarChartData');
+    const existingDBCD = existingDailyBarChartData ? JSON.parse(existingDailyBarChartData) : [];
+
+    setDailyBarChartData(existingDBCD);
+  },[]);
+
   const [data, setData] = useState([
     {
       id: 1,
@@ -48,99 +47,72 @@ export default function Home() {
     },
   ]);
 
+  const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs | null>(dayjs());
+  const [name, setName] = useState<string>('');
+  const [position, setPosition] = useState<string>('');
+
+  const { notify, ToastContainer } = useExecuteToast();
+
   const [barChartData, setBarChartData] = useState<BarChartData>({
-    labels: [],
+    labels: [], // activity
     datasets: [{
-      label: 'Total Time Spent (hrs)',
-      data: [],
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.9)',   // Red
-        'rgba(54, 162, 235, 0.9)',   // Blue
-        'rgba(255, 206, 86, 0.9)',   // Yellow
-        'rgba(75, 192, 192, 0.9)',   // Teal
-        'rgba(153, 102, 255, 0.9)',  // Purple
-        'rgba(255, 159, 64, 0.9)',   // Orange
-        'rgba(100, 181, 246, 0.9)',  // Light Blue
-        'rgba(244, 67, 54, 0.9)',    // Deep Red
-        'rgba(76, 175, 80, 0.9)',    // Green
-        'rgba(255, 87, 34, 0.9)',    // Deep Orange
-        'rgba(33, 150, 243, 0.9)',   // Indigo Blue
-        'rgba(121, 85, 72, 0.9)',    // Brown
-        'rgba(96, 125, 139, 0.9)',   // Blue Grey
-        'rgba(0, 188, 212, 0.9)',    // Cyan
-        'rgba(233, 30, 99, 0.9)',    // Pink
-      ],
-      borderColor: [
-        'rgba(255, 99, 132, 1)',     // Red
-        'rgba(54, 162, 235, 1)',     // Blue
-        'rgba(255, 206, 86, 1)',     // Yellow
-        'rgba(75, 192, 192, 1)',     // Teal
-        'rgba(153, 102, 255, 1)',    // Purple
-        'rgba(255, 159, 64, 1)',     // Orange
-        'rgba(100, 181, 246, 1)',    // Light Blue
-        'rgba(244, 67, 54, 1)',      // Deep Red
-        'rgba(76, 175, 80, 1)',      // Green
-        'rgba(255, 87, 34, 1)',      // Deep Orange
-        'rgba(33, 150, 243, 1)',     // Indigo Blue
-        'rgba(121, 85, 72, 1)',      // Brown
-        'rgba(96, 125, 139, 1)',     // Blue Grey
-        'rgba(0, 188, 212, 1)',      // Cyan
-        'rgba(233, 30, 99, 1)',      // Pink
-      ],
+      data: [], // documents generated
+      backgroundColor: [],
+      borderColor: [],
       borderWidth: 1,
     }],
   });
 
   const [pieChartData, setPieChartData] = useState<PieChartData>({
-    labels: [],
+    labels: [], // activity
     datasets: [{
       label: 'Total Time Spent (hrs)',
-      data: [],
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.9)',   // Red
-        'rgba(54, 162, 235, 0.9)',   // Blue
-        'rgba(255, 206, 86, 0.9)',   // Yellow
-        'rgba(75, 192, 192, 0.9)',   // Teal
-        'rgba(153, 102, 255, 0.9)',  // Purple
-        'rgba(255, 159, 64, 0.9)',   // Orange
-        'rgba(100, 181, 246, 0.9)',  // Light Blue
-        'rgba(244, 67, 54, 0.9)',    // Deep Red
-        'rgba(76, 175, 80, 0.9)',    // Green
-        'rgba(255, 87, 34, 0.9)',    // Deep Orange
-        'rgba(33, 150, 243, 0.9)',   // Indigo Blue
-        'rgba(121, 85, 72, 0.9)',    // Brown
-        'rgba(96, 125, 139, 0.9)',   // Blue Grey
-        'rgba(0, 188, 212, 0.9)',    // Cyan
-        'rgba(233, 30, 99, 0.9)',    // Pink
-      ],
+      data: [], // time spent
+      backgroundColor: [],
       hoverOffset: 4,
     }],
   });
 
-  const dailyLabels = [
-    'October 14', 'October 15', 'October 16'
-  ];
+  const [dailyBarChartData, setDailyBarChartData] = useState<DailyBarChartData[]>([
+    {
+      labels: '', // date
+      datasets: [
+        {
+          label: '', // activity
+          data: [], // documents generated
+          backgroundColor: '',  
+        },
+      ],
+    },
+  ]);
+
+
+  const transformDataForChart = (dailyBarChartData: DailyBarChartData[]) => {
+    const labels = dailyBarChartData.map((entry) => entry.labels);
+    const datasetsMap = new Map<string, { label: string; data: number[]; backgroundColor: string }>();
   
-  const dailyBarChartData = {
-    labels: dailyLabels,
-    datasets: [
-      {
-        label: 'Expense Tracking',
-        data: [120, 150, 180],
-        backgroundColor: 'rgba(75, 192, 192, 0.6)', // Color for the Sales bars
-      },
-      {
-        label: 'Bank Reconciliation',
-        data: [100, 130, 160],
-        backgroundColor: 'rgba(255, 99, 132, 0.6)', // Color for the Expenses bars
-      },
-      {
-        label: 'Updating Tracker',
-        data: [20, 20, 20],
-        backgroundColor: 'rgba(255, 206, 86, 0.6)', // Color for the Profits bars
-      },
-    ],
+    // Consolidate datasets for each activity type across all dates
+    dailyBarChartData.forEach((entry) => {
+      entry.datasets.forEach((dataset) => {
+        if (!datasetsMap.has(dataset.label)) {
+          datasetsMap.set(dataset.label, {
+            label: dataset.label,
+            data: Array(dailyBarChartData.length).fill(0), // initialize with zeros for each date
+            backgroundColor: dataset.backgroundColor,
+          });
+        }
+        const index = dailyBarChartData.indexOf(entry);
+        datasetsMap.get(dataset.label)!.data[index] = dataset.data[0]; // Use non-null assertion operator
+      });
+    });
+  
+    return {
+      labels,
+      datasets: Array.from(datasetsMap.values()),
+    };
   };
+  
+  const sampleDataForDailyBarChart = transformDataForChart(dailyBarChartData);
 
   const [currentTime, setCurrentTime] = useState('');
   const [filter, setFilter] = useState('Today');
@@ -168,60 +140,70 @@ export default function Home() {
     return () => clearInterval(intervalId);
   }, []); // Empty dependency array ensures this runs once when the component mounts
 
-  // // Update the barChartData and pieChartData whenever data changes
-  // useEffect(() => {
-  //   const newLabels = data.map(item => item.activity).filter(activity => activity); // Get non-empty activities
-  //   const newData = data.map(item => item.totalTime ? Number(item.totalTime) : 0); // Convert totalTime to number for graph
-    
-  //   setBarChartData(prevData => ({
-  //     labels: newLabels, // Update the labels for the bar chart
-  //     datasets: [{
-  //       ...prevData.datasets[0],
-  //       data: newData, // Update the data for the bar chart
-  //     }],
-  //   }));
-
-  //   setPieChartData(prevData => ({
-  //     labels: newLabels, // Update the labels for the pie chart
-  //     datasets: [{
-  //       ...prevData.datasets[0],
-  //       data: newData, // Update the data for the pie chart
-  //     }],
-  //   }));
-  // }, [data]);
-
   useEffect(() => {
     // Aggregate data by activity
-    const activityTimeMap: { [key: string]: number } = data.reduce((acc, item) => {
-      if (item.activity) {
-        const timeSpent = item.totalTime ? Number(item.totalTime) : 0;
-        if (acc[item.activity]) {
-          acc[item.activity] += timeSpent; // Add to existing activity time
-        } else {
-          acc[item.activity] = timeSpent; // Initialize new activity time
+    const activityDataMap: { [key: string]: { timeSpent: number; docsGenerated: number } } = data.reduce(
+      (acc, item) => {
+        if (item.activity) {
+          const timeSpent = item.totalTime ? Number(item.totalTime) : 0;
+          const docsGenerated = item.docsGenerated ? Number(item.docsGenerated) : 0;
+  
+          if (acc[item.activity]) {
+            // Add to existing activity data
+            acc[item.activity].timeSpent += timeSpent;
+            acc[item.activity].docsGenerated += docsGenerated;
+          } else {
+            // Initialize new activity data
+            acc[item.activity] = {
+              timeSpent,
+              docsGenerated,
+            };
+          }
         }
-      }
-      return acc;
-    }, {} as { [key: string]: number });
+        return acc;
+      },
+      {} as { [key: string]: { timeSpent: number; docsGenerated: number } }
+    );
   
-    // Extract labels (unique activities) and corresponding data (total time spent)
-    const newLabels = Object.keys(activityTimeMap);
-    const newData = Object.values(activityTimeMap);
+    // Extract labels (unique activities), total time spent, and generated documents
+    const newLabels = Object.keys(activityDataMap);
+    const newTimeSpentData = newLabels.map((activity) => activityDataMap[activity].timeSpent);
+    const newDocsGeneratedData = newLabels.map((activity) => activityDataMap[activity].docsGenerated);
   
-    setBarChartData(prevData => ({
+    // Dynamically generate backgroundColor and borderColor based on activityData
+    const backgroundColor = newLabels.map((activity) => {
+      const activityInfo = activityData.find((a) => a.value === activity);
+      return activityInfo ? activityInfo.color : 'rgba(0,0,0,0.1)'; // default to a light grey if not found
+    });
+  
+    const borderColor = newLabels.map((activity) => {
+      const activityInfo = activityData.find((a) => a.value === activity);
+      return activityInfo ? activityInfo.color.replace('0.9', '1') : 'rgba(0,0,0,0.2)'; // default to grey with 1 opacity
+    });
+  
+    // Update bar chart data with total time spent
+    setBarChartData((prevData) => ({
       labels: newLabels, // Update the labels for the bar chart
-      datasets: [{
-        ...prevData.datasets[0],
-        data: newData, // Update the data for the bar chart
-      }],
+      datasets: [
+        {
+          ...prevData.datasets[0],
+          data: newDocsGeneratedData, // Update the data for the bar chart
+          backgroundColor,       // Set dynamic background colors
+          borderColor,           // Set dynamic border colors
+        },
+      ],
     }));
   
-    setPieChartData(prevData => ({
+    // Update pie chart data with docs generated
+    setPieChartData((prevData) => ({
       labels: newLabels, // Update the labels for the pie chart
-      datasets: [{
-        ...prevData.datasets[0],
-        data: newData, // Update the data for the pie chart
-      }],
+      datasets: [
+        {
+          ...prevData.datasets[0],
+          data: newTimeSpentData, // Update the data for the pie chart
+          backgroundColor,           // Set dynamic background colors for the pie chart
+        },
+      ],
     }));
   }, [data]);
 
@@ -230,8 +212,43 @@ export default function Home() {
   };
 
   const handleSaveData = () => {
+    const formattedData = data.map(item => ({
+        ...item,
+        startTime: item.startTime.format(),
+        endTime: item.endTime.format(),
+        date: selectedDate ? selectedDate.format('MMMM D') : '',
+        name,
+        position
+    }));
 
-  };
+    const newDailyBarChartEntry: DailyBarChartData = {
+        labels: selectedDate ? selectedDate.format('MMMM D') : '',
+        datasets: barChartData.labels.map((activityLabel, index) => ({
+            label: activityLabel || '',
+            data: [Number(barChartData.datasets[0].data[index]) || 0],
+            backgroundColor: barChartData.datasets[0].backgroundColor[index] || '',
+        })),
+    };
+
+    // Retrieve existing data from localStorage with a null check
+    const existingDataString = localStorage.getItem('dailyBarChartData');
+    const existingData = existingDataString ? JSON.parse(existingDataString) : []; // If null, use an empty array
+
+    // Merge new data with existing data
+    const updatedData = [...existingData, newDailyBarChartEntry];
+
+    // Save the updated data back to localStorage
+    localStorage.setItem('dailyBarChartData', JSON.stringify(updatedData));
+    localStorage.setItem('ActivityData', JSON.stringify(formattedData));
+
+    // Update state to reflect new chart data
+    setDailyBarChartData(updatedData);
+
+    // Notify the user
+    notify('Activity has been saved...');
+    window.location.reload();
+};
+
 
   return (
     <section className="flex flex-col gap-2 w-full h-full py-2 px-12 overflow-hidden">
@@ -259,7 +276,7 @@ export default function Home() {
             filter === "Today"
               ? barChartData
               : filter === "Daily"
-              ? dailyBarChartData
+              ? sampleDataForDailyBarChart
               : filter === "Monthly"
               ? monthlyBarChartData
               : barChartData
@@ -274,15 +291,32 @@ export default function Home() {
       <h4 className="text-center text-black text-[18px] mt-4 mb-2">
         Activity Breakdown
       </h4>
+      <ToastContainer />
       <div className="flex flex-col gap-4 mb-4">
         <div className="flex flex-col lg:flex-row justify-center items-center">
-          <CustomTextField label="Name" />
-          <CustomTextField label="Position" />
+          <CustomTextField
+            label="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <CustomTextField
+            label="Position"
+            value={position}
+            onChange={(e) => setPosition(e.target.value)}
+          />
           <div className="mt-[-10px]">
-            <BasicDatePicker label="Activity Date" />
+            <BasicDatePicker
+              label="Activity Date"
+              value={selectedDate}
+              onChange={(date) => setSelectedDate(date)}
+            />
           </div>
         </div>
-        <EditableTable data={data} setData={setData} saveData={handleSaveData}/>
+        <EditableTable
+          data={data}
+          setData={setData}
+          saveData={handleSaveData}
+        />
       </div>
     </section>
   );

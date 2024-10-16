@@ -137,78 +137,94 @@ export const activityData = [
         id: 1,
         label: 'AP Bookkeeping',
         value: 'AP Bookkeeping',
+        color: 'rgba(255, 99, 132, 0.9)' // red
     },
     {
         id: 2,
         label: 'GL Bookkeeping',
         value: 'GL Bookkeeping',
+        color: 'rgba(54, 162, 235, 0.9)' // blue
     },
     {
         id: 3,
         label: 'Tax Forms',
         value: 'Tax Forms', 
+        color: 'rgba(255, 206, 86, 0.9)' // yellow
     },
     {
         id: 4,
         label: 'Expense Tracking',
         value: 'Expense Tracking',
+        color: 'rgba(75, 192, 192, 0.9)', // Teal'
     },
     {
         id: 5,
         label: 'Bank Reconciliation',
         value: 'Bank Reconciliation',
+        color: 'rgba(153, 102, 255, 0.9)', // Purple
     },
     {
         id: 6,
         label: 'Monthly End Closing',
         value: 'Monthly End Closing',
+        color: 'rgba(255, 159, 64, 0.9)', // Orange
     },
     {
         id: 7,
         label: 'Monthly FS',
         value: 'Monthly FS',
+        color: 'rgba(100, 181, 246, 0.9)', // Light Blue
     },
     {
         id: 8,
         label: 'Monthly EWT',
         value: 'Monthly EWT',
+        color: 'rgba(244, 67, 54, 0.9)',  // Deep Red
     },
     {
         id: 9,
         label: 'Monthly Wtax Compensation',
         value: 'Monthly Wtax Compensation',
+        color: 'rgba(76, 175, 80, 0.9)',  // Green
     },
     {
         id: 10,
         label: 'Schedules',
         value: 'Schedules',
+        color: 'rgba(255, 87, 34, 0.9)',  // Deep Orange
     },
     {
         id: 11,
         label: 'Quarterly VAT',
         value: 'Quarterly VAT',
+        color: 'rgba(33, 150, 243, 0.9)', // Indigo Blue
     },
     {
         id: 12,
         label: 'Quarterly ITR',
         value: 'Quarterly ITR',
+        color: 'rgba(121, 85, 72, 0.9)',  // Brown
     },
     {
         id: 13,
         label: 'Updating Tracker',
         value: 'Updating Tracker',
+        color: 'rgba(96, 125, 139, 0.9)', // Blue Grey
     },
     {
         id: 14,
         label: 'Break',
         value: 'Break',
+        color: 'rgba(0, 188, 212, 0.9)',  // Cyan
     },
     {
         id: 15,
         label: 'Others',
         value: 'Others',
+        color: 'rgba(233, 30, 99, 0.9)',    // Pink
     },
   ];
+
 
   export const filterByData = [
     {
@@ -278,3 +294,76 @@ export const activityData = [
       },
     ],
   };
+
+  export const sampleDailyLabels = [
+    'October 07'
+  ];
+  
+  export const sampleDailyBarChartData = [
+    {
+        labels: 'October 07',
+        datasets: [
+          {
+            label: 'GL Bookkeeping',
+            data: [0.17],
+            backgroundColor: 'rgba(54, 162, 235, 0.9)', // Color for the Sales bars
+          },
+          {
+            label: 'Bank Reconciliation',
+            data: [0.05],
+            backgroundColor: 'rgba(153, 102, 255, 0.9)', // Color for the Expenses bars
+          },
+          {
+            label: 'Quarterly VAT',
+            data: [0.07],
+            backgroundColor: 'rgba(33, 150, 243, 0.9)', // Color for the Profits bars
+          },
+          {
+            label: 'Tax Forms',
+            data: [0.01],
+            backgroundColor: 'rgba(255, 206, 86, 0.9)', // Color for the Profits bars
+          },
+          {
+            label: 'Others',
+            data: [0.01],
+            backgroundColor: 'rgba(233, 30, 99, 0.9)', // Color for the Profits bars
+          },
+          {
+            label: 'Break',
+            data: [0.04],
+            backgroundColor: 'rgba(0, 188, 212, 0.9)', // Color for the Profits bars
+          },
+          {
+            label: 'AP Bookkeeping',
+            data: [0.01],
+            backgroundColor: 'rgba(255, 99, 132, 0.9)', // Color for the Profits bars
+          },
+          {
+            label: 'Updating Tracker',
+            data: [0.02],
+            backgroundColor: 'rgba(96, 125, 139, 0.9)', // Color for the Profits bars
+          },
+        ],
+    },
+    {
+        labels: 'October 08',
+        datasets: [
+          {
+            label: 'GL Bookkeeping',
+            data: [0.02],
+            backgroundColor: 'rgba(54, 162, 235, 0.9)', // Color for the Sales bars
+          },
+          {
+            label: 'Bank Reconciliation',
+            data: [0.03],
+            backgroundColor: 'rgba(153, 102, 255, 0.9)', // Color for the Expenses bars
+          },
+          {
+            label: 'Quarterly VAT',
+            data: [0.06],
+            backgroundColor: 'rgba(33, 150, 243, 0.9)', // Color for the Profits bars
+          },
+        ],
+    },
+  ]
+

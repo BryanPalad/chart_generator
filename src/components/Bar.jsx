@@ -22,6 +22,11 @@ ChartJs.register(
 
 export const BarGraph = ({data, filter}) => {
     const options = {
+      plugins: {
+        legend: {
+          display: false
+        }
+      },
       responsive: true,
       scales: {
         y: {
@@ -30,7 +35,7 @@ export const BarGraph = ({data, filter}) => {
         x: {
           title: {
             display: true,
-            text: "Activities",
+            text: "Activity Data",
             font: {
               weight: 'bold',
             },
@@ -52,7 +57,7 @@ export const BarGraph = ({data, filter}) => {
         },
         title: {
           display: true,
-          text: "Monthly Activity Data", // Title of the chart
+          text:  "Activity Data", // Title of the chart
         },
       },
       scales: {
@@ -68,9 +73,9 @@ export const BarGraph = ({data, filter}) => {
   return (
     <section className="flex flex-col w-full">
       <Box className="flex justify-center items-center border border-slate-300 py-2">
-        <h4 className="text-[18px] font-bold text-[#fc031c]">Time Spent Per Activity</h4>
+        <h4 className="text-[18px] font-bold text-[#fc031c]">Documents Generated</h4>
       </Box>
-      <Bar options={filter === 'Today' ? options : stackedOptions } data={data} />
+      <Bar options={filter === 'Today' ? options : stackedOptions } data={data || []} />
     </section>
   );
 };

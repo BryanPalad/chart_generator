@@ -26,6 +26,11 @@ export const BasicDialogForm: React.FC<Props> = ({dialogTitle, dialogHeader, dia
     setOpen(false);
   };
 
+  const handleAgreeAndClose = () => {
+    handleAgree();
+    handleClose();
+  };
+
   return (
     <React.Fragment>
       <Button variant="outlined" onClick={handleClickOpen}>
@@ -47,7 +52,7 @@ export const BasicDialogForm: React.FC<Props> = ({dialogTitle, dialogHeader, dia
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>{disagreeBtnTitle}</Button>
-          <Button onClick={handleAgree} autoFocus>
+          <Button onClick={handleAgreeAndClose} autoFocus>
             {agreeBtnTitle}
           </Button>
         </DialogActions>

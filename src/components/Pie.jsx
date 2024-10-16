@@ -25,7 +25,7 @@ export const PieGraph = ({data}) => {
       <React.Fragment>
         <section className="w-full flex flex-col items-center">
         <Box className="flex justify-center items-center border border-slate-300 py-2 w-full">
-          <h4 className="text-[18px] font-bold text-[#fc031c]">Activities Performed</h4>
+          <h4 className="text-[18px] font-bold text-[#fc031c]">Time Spent per Activity</h4>
         </Box>
         <Box className="flex justify-center items-center">
           {data.datasets[0].data <= 0 ? ( 
@@ -34,7 +34,7 @@ export const PieGraph = ({data}) => {
             </div>
           ) : (
             <Box className="mt-8">
-              <Pie options={options} data={data} style={{width: '450px'}}/>
+              <Pie options={options} data={data || []} style={{width: '450px'}}/>
             </Box>
           )}
           </Box>
